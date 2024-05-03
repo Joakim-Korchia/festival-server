@@ -1,0 +1,9 @@
+{
+    "env": "development",
+    "dialect": "mysql",
+    "directory": "./src/models",
+    "host": "localhost",
+    "username": "root",
+    "password": "3YrmQ6@fEaoBEBf5MHqL6CTMHHrN?Ly8oy7LnDX",
+    "database": "air2java"
+  }
