@@ -5,8 +5,8 @@ exports.getAllInstruments = async (req, res) => {
     const instruments = await Instrument.findAll();
     res.json(instruments);
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: 'Erreur lors de la récupération des instruments.' });
+    console.error('Erreur lors de la récupération des instruments:', error);
+    res.status(500).json({ message: 'Erreur interne du serveur.' });
   }
 };
 
@@ -19,25 +19,27 @@ exports.getInstrumentById = async (req, res) => {
       res.status(404).json({ message: 'Instrument non trouvé.' });
     }
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: 'Erreur lors de la récupération de l\'instrument.' });
+    console.error(`Erreur lors de la récupération de l'instrument avecl'ID ${req.params.id}:`, error);
+    res.status(500).json({ message: 'Erreur interne du serveur.' });
   }
 };
 
 exports.createInstrument = async (req, res) => {
   try {
+    // Validation des données ici
     const instrument = await Instrument.create(req.body);
     res.status(201).json(instrument);
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: 'Erreur lors de la création de l\'instrument.' });
+    console.error('Erreur lors de la création de l\'instrument:', error);
+    res.status(400).json({ message: 'Erreur lors de la création de l\'instrument.' });
   }
 };
 
 exports.updateInstrument = async (req, res) => {
   try {
+    // Validation des données ici
     const [updated] = await Instrument.update(req.body, {
-      where: { id_instru: req.params.id },
+      where: { id_instrument: req.params.id },
     });
     if (updated) {
       const updatedInstrument = await Instrument.findByPk(req.params.id);
@@ -46,23 +48,23 @@ exports.updateInstrument = async (req, res) => {
       res.status(404).json({ message: 'Instrument non trouvé.' });
     }
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: 'Erreur lors de la mise à jour de l\'instrument.' });
+    console.error(`Erreur lors de la mise à jour de l'instrument avec l'ID ${req.params.id}:`, error);
+    res.status(500).json({ message: 'Erreur interne du serveur.' });
   }
 };
 
 exports.deleteInstrument = async (req, res) => {
   try {
     const deleted = await Instrument.destroy({
-      where: { id_instru: req.params.id },
+      where: { id_instrument: req.params.id },
     });
     if (deleted) {
-      res.status(204).json({ message: 'Instrument supprimé.' });
+      res.status(204).end();
     } else {
       res.status(404).json({ message: 'Instrument non trouvé.' });
     }
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: 'Erreur lors de la suppression de l\'instrument.' });
+    console.error(`Erreur lors de la suppression de l'instrument avec l'ID ${req.params.id}:`, error);
+    res.status(500).json({ message: 'Erreur interne du serveur.' });
   }
-};
+}; 

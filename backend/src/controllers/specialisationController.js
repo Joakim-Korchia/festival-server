@@ -5,8 +5,8 @@ exports.getAllSpecialisations = async (req, res) => {
     const specialisations = await Specialisation.findAll();
     res.json(specialisations);
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: 'Erreur lors de la récupération des spécialisations.' });
+    console.error('Erreur lors de la récupération des spécialisations:', error);
+    res.status(500).json({ message: 'Erreur interne du serveur.' });
   }
 };
 
@@ -19,8 +19,8 @@ exports.getSpecialisationById = async (req, res) => {
       res.status(404).json({ message: 'Spécialisation non trouvée.' });
     }
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: 'Erreur lors de la récupération de la spécialisation.' });
+    console.error(`Erreur lors de la récupération de la spécialisation avec l'ID ${req.params.id}:`, error);
+    res.status(500).json({ message: 'Erreur interne du serveur.' });
   }
 };
 
@@ -29,8 +29,8 @@ exports.createSpecialisation = async (req, res) => {
     const specialisation = await Specialisation.create(req.body);
     res.status(201).json(specialisation);
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: 'Erreur lors de la création de la spécialisation.' });
+    console.error('Erreur lors de la création de la spécialisation:', error);
+    res.status(500).json({ message: 'Erreur interne du serveur.' });
   }
 };
 
@@ -46,8 +46,8 @@ exports.updateSpecialisation = async (req, res) => {
       res.status(404).json({ message: 'Spécialisation non trouvée.' });
     }
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: 'Erreur lors de la mise à jour de la spécialisation.' });
+    console.error(`Erreur lors de la mise à jour de la spécialisation avec l'ID ${req.params.id}:`, error);
+    res.status(500).json({ message: 'Erreur interne du serveur.' });
   }
 };
 
@@ -57,12 +57,12 @@ exports.deleteSpecialisation = async (req, res) => {
       where: { id_spe: req.params.id },
     });
     if (deleted) {
-      res.status(204).json({ message: 'Spécialisation supprimée.' });
+      res.status(204).end();
     } else {
       res.status(404).json({ message: 'Spécialisation non trouvée.' });
     }
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: 'Erreur lors de la suppression de la spécialisation.' });
+    console.error(`Erreur lors de la suppression de la spécialisation avec l'ID ${req.params.id}:`, error);
+    res.status(500).json({ message: 'Erreur interne du serveur.' });
   }
 };

@@ -5,8 +5,8 @@ exports.getAllResponsabilityPersons = async (req, res) => {
     const responsabilityPersons = await ResponsabilityPerson.findAll();
     res.json(responsabilityPersons);
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: 'Erreur lors de la récupération des responsabilités des personnes.' });
+    console.error('Erreur lors de la récupération des responsabilités des personnes:', error);
+    res.status(500).json({ message: 'Erreur interne du serveur.' });
   }
 };
 
@@ -19,8 +19,8 @@ exports.getResponsabilityPersonById = async (req, res) => {
       res.status(404).json({ message: 'Responsabilité de la personne non trouvée.' });
     }
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: 'Erreur lors de la récupération de la responsabilité de la personne.' });
+    console.error(`Erreur lors de la récupération de la responsabilité de la personne avec l'ID ${req.params.id}:`, error);
+    res.status(500).json({ message: 'Erreur interne du serveur.' });
   }
 };
 
@@ -29,8 +29,8 @@ exports.createResponsabilityPerson = async (req, res) => {
     const responsabilityPerson = await ResponsabilityPerson.create(req.body);
     res.status(201).json(responsabilityPerson);
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: 'Erreur lors de la création de la responsabilité de la personne.' });
+    console.error('Erreur lors de la création de la responsabilité de la personne:', error);
+    res.status(500).json({ message: 'Erreur interne du serveur.' });
   }
 };
 
@@ -46,8 +46,8 @@ exports.updateResponsabilityPerson = async (req, res) => {
       res.status(404).json({ message: 'Responsabilité de la personne non trouvée.' });
     }
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: 'Erreur lors de la mise à jour de la responsabilité de la personne.' });
+    console.error(`Erreur lors de la mise à jour de la responsabilité de la personne avec l'ID ${req.params.id}:`, error);
+    res.status(500).json({ message: 'Erreur interne du serveur.' });
   }
 };
 
@@ -57,12 +57,12 @@ exports.deleteResponsabilityPerson = async (req, res) => {
       where: { id_resp_pers: req.params.id },
     });
     if (deleted) {
-      res.status(204).json({ message: 'Responsabilité de la personne supprimée.' });
+      res.status(204).end();
     } else {
       res.status(404).json({ message: 'Responsabilité de la personne non trouvée.' });
     }
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: 'Erreur lors de la suppression de la responsabilité de la personne.' });
+    console.error(`Erreur lors de la suppression de la responsabilité de la personne avec l'ID ${req.params.id}:`, error);
+    res.status(500).json({ message: 'Erreur interne du serveur.' });
   }
 };

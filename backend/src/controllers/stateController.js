@@ -5,8 +5,8 @@ exports.getAllStates = async (req, res) => {
     const states = await State.findAll();
     res.json(states);
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: 'Erreur lors de la récupération du pays.' });
+    console.error('Erreur lors de la récupération des états:', error);
+    res.status(500).json({ message: 'Erreur interne du serveur.' });
   }
 };
 
@@ -16,11 +16,11 @@ exports.getStateById = async (req, res) => {
     if (state) {
       res.json(state);
     } else {
-      res.status(404).json({ message: 'Pays non trouvé.' });
+      res.status(404).json({ message: 'État non trouvé.' });
     }
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: 'Erreur lors de la récupération du pays.' });
+    console.error(`Erreur lors de la récupération de l'état avec l'ID ${req.params.id}:`, error);
+    res.status(500).json({ message: 'Erreur interne du serveur.' });
   }
 };
 
@@ -29,8 +29,8 @@ exports.createState = async (req, res) => {
     const state = await State.create(req.body);
     res.status(201).json(state);
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: 'Erreur lors de la création du pays.' });
+    console.error('Erreur lors de la création de l\'état:', error);
+    res.status(500).json({ message: 'Erreur interne du serveur.' });
   }
 };
 
@@ -43,11 +43,11 @@ exports.updateState = async (req, res) => {
       const updatedState = await State.findByPk(req.params.id);
       res.json(updatedState);
     } else {
-      res.status(404).json({ message: 'Pays non trouvé.' });
+      res.status(404).json({ message: 'État non trouvé.' });
     }
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: 'Erreur lors de la mise à jour du pays.' });
+    console.error(`Erreur lors de la mise à jour de l'état avec l'ID ${req.params.id}:`, error);
+    res.status(500).json({ message: 'Erreur interne du serveur.' });
   }
 };
 
@@ -57,12 +57,12 @@ exports.deleteState = async (req, res) => {
       where: { id_state: req.params.id },
     });
     if (deleted) {
-      res.status(204).json({ message: 'Pays supprimé.' });
+      res.status(204).end();
     } else {
-      res.status(404).json({ message: 'Pays non trouvé.' });
+      res.status(404).json({ message: 'État non trouvé.' });
     }
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: 'Erreur lors de la suppression du pays.' });
+    console.error(`Erreur lors de la suppression de l'état avec l'ID ${req.params.id}:`, error);
+    res.status(500).json({ message: 'Erreur interne du serveur.' });
   }
 };

@@ -1,68 +1,29 @@
 const { Perform } = require('../models');
 
-exports.getAllPerformances = async (req, res) => {
+exports.createPerform = async (req, res) => {
   try {
-    const performances = await Perform.findAll();
-    res.json(performances);
+    const { ArtistIdArtist, TrackIdTrack } = req.body;
+    const perform = await Perform.create({ ArtistIdArtist, TrackIdTrack });
+    res.status(201).json(perform);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: 'Erreur lors de la récupération des performances.' });
+    res.status(500).json({ message: 'Erreur lors de la création de l\'association perform.' });
   }
 };
 
-exports.getPerformanceById = async (req, res) => {
+exports.deletePerform = async (req, res) => {
   try {
-    const performance = await Perform.findByPk(req.params.id);
-    if (performance) {
-      res.json(performance);
-    } else {
-      res.status(404).json({ message: 'Performance non trouvée.' });
-    }
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: 'Erreur lors de la récupération de la performance.' });
-  }
-};
-
-exports.createPerformance = async (req, res) => {
-  try {
-    const performance = await Perform.create(req.body);
-    res.status(201).json(performance);
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: 'Erreur lors de la création de la performance.' });
-  }
-};
-
-exports.updatePerformance = async (req, res) => {
-  try {
-    const [updated] = await Perform.update(req.body, {
-      where: { id: req.params.id },
-    });
-    if (updated) {
-      const updatedPerformance = await Perform.findByPk(req.params.id);
-      res.json(updatedPerformance);
-    } else {
-      res.status(404).json({ message: 'Performance non trouvée.' });
-    }
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: 'Erreur lors de la mise à jour de la performance.' });
-  }
-};
-
-exports.deletePerformance = async (req, res) => {
-  try {
+    const { artistId, trackId } = req.params;
     const deleted = await Perform.destroy({
-      where: { id: req.params.id },
+      where: { ArtistIdArtist: artistId, TrackIdTrack: trackId },
     });
     if (deleted) {
-      res.status(204).json({ message: 'Performance supprimée.' });
+      res.status(204).json({ message: 'Association perform supprimée.' });
     } else {
-      res.status(404).json({ message: 'Performance non trouvée.' });
+      res.status(404).json({ message: 'Association perform non trouvée.' });
     }
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: 'Erreur lors de la suppression de la performance.' });
+    res.status(500).json({ message: 'Erreur lors de la suppression de l\'association perform.' });
   }
 };

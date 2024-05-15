@@ -5,8 +5,8 @@ exports.getAllTracks = async (req, res) => {
     const tracks = await Track.findAll();
     res.json(tracks);
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: 'Erreur lors de la récupération des morceaux.' });
+    console.error('Erreur lors de la récupération des morceaux:', error);
+    res.status(500).json({ message: 'Erreur interne du serveur.' });
   }
 };
 
@@ -19,8 +19,8 @@ exports.getTrackById = async (req, res) => {
       res.status(404).json({ message: 'Morceau non trouvé.' });
     }
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: 'Erreur lors de la récupération du morceau.' });
+    console.error(`Erreur lors de la récupération du morceau avec l'ID ${req.params.id}:`, error);
+    res.status(500).json({ message: 'Erreur interne du serveur.' });
   }
 };
 
@@ -29,8 +29,8 @@ exports.createTrack = async (req, res) => {
     const track = await Track.create(req.body);
     res.status(201).json(track);
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: 'Erreur lors de la création du morceau.' });
+    console.error('Erreur lors de la création du morceau:', error);
+    res.status(500).json({ message: 'Erreur interne du serveur.' });
   }
 };
 
@@ -46,8 +46,8 @@ exports.updateTrack = async (req, res) => {
       res.status(404).json({ message: 'Morceau non trouvé.' });
     }
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: 'Erreur lors de la mise à jour du morceau.' });
+    console.error(`Erreur lors**Erreur lors de la mise à jour du morceau avec l'ID ${req.params.id}:`, error);
+    res.status(500).json({ message: 'Erreur interne du serveur.' });
   }
 };
 
@@ -57,12 +57,12 @@ exports.deleteTrack = async (req, res) => {
       where: { id_track: req.params.id },
     });
     if (deleted) {
-      res.status(204).json({ message: 'Morceau supprimé.' });
+      res.status(204).end();
     } else {
       res.status(404).json({ message: 'Morceau non trouvé.' });
     }
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: 'Erreur lors de la suppression du morceau.' });
+    console.error(`Erreur lors de la suppression du morceau avec l'ID ${req.params.id}:`, error);
+    res.status(500).json({ message: 'Erreur interne du serveur.' });
   }
 };
